@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather Forecast App</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body{
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background: linear-gradient(135deg,#4facfe,#00f2fe);
+            transition:0.5s;
+        }
+
+        .navbar{
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            background:#1565C0;
+            color:white;
+            text-align:center;
+            padding:15px;
+            font-size:24px;
+            font-weight:bold;
+        }
+
+        .container{
+            background:white;
+            width:450px;
+            padding:30px;
+            border-radius:20px;
+            text-align:center;
+            box-shadow:0px 10px 25px rgba(0,0,0,0.2);
+            margin-top:70px;
+        }
+
+        h1{
+            color:#333;
+            margin-bottom:20px;
+        }
+
+        input{
+            width:100%;
+            padding:12px;
+            border:1px solid #ccc;
+            border-radius:10px;
+            margin-bottom:15px;
+            font-size:16px;
+        }
+
+        button{
+            width:100%;
+            padding:12px;
+            border:none;
+            border-radius:10px;
+            background:#2196F3;
+            color:white;
+            font-size:16px;
+            cursor:pointer;
+            margin-top:10px;
+        }
+
+        button:hover{
+            background:#1976D2;
+        }
+
+        .weather-card{
+            margin-top:25px;
+            padding:20px;
+            border-radius:15px;
+            background:#f5f5f5;
+        }
+
+        .temp{
+            font-size:40px;
+            font-weight:bold;
+            color:#2196F3;
+        }
+
+        .city{
+            font-size:24px;
+            font-weight:bold;
+            margin-bottom:10px;
+        }
+
+        .history{
+            margin-top:20px;
+            text-align:left;
+        }
+
+        .history h3{
+            margin-bottom:10px;
+        }
+
+        .history ul{
+            list-style:none;
+        }
+
+        .history li{
+            padding:5px;
+            border-bottom:1px solid #ddd;
+        }
+
+        .dark{
+            background:#121212;
+        }
+
+        .dark .container{
+            background:#1e1e1e;
+            color:white;
+        }
+
+        .dark .weather-card{
+            background:#2c2c2c;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    🌦 Weather Forecast Application
+</nav>
+
+<div class="container">
+
+    <h1>Check Weather</h1>
+
+    <button onclick="toggleMode()">
+        🌙 Dark Mode
+    </button>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <input
+            type="text"
+            name="city"
+            placeholder="Enter City Name"
+            required>
+
+        <button type="submit">
+            Search Weather
+        </button>
+    </form>
+
+    {% if weather %}
+
+    <div class="weather-card">
+
+        <img src="https://openweathermap.org/img/wn/{{ weather.icon }}@2x.png">
+
+        <div class="city">
+            {{ weather.city }}
+        </div>
+
+        <div class="temp">
+            {{ weather.temperature }}°C
+        </div>
+
+        <p>☁ {{ weather.description }}</p>
+
+        <br>
+
+        <p>💧 Humidity : {{ weather.humidity }}%</p>
+
+        <p>🌬 Wind Speed : {{ weather.wind }} m/s</p>
+
+        <br>
+
+        <p>📅 {{ weather.date }}</p>
+
+        <p>🕒 {{ weather.time }}</p>
+
+    </div>
+
+    {% endif %}
+
+    <div class="history">
+
+        <h3>Recent Searches</h3>
+
+        <ul>
+            {% for item in history %}
+                <li>{{ item.city }}</li>
+            {% endfor %}
+        </ul>
+
+    </div>
+
+</div>
+
+<script>
+
+function toggleMode(){
+
+    document.body.classList.toggle("dark");
+
+}
+
+</script>
+
+</body>
+</html>
